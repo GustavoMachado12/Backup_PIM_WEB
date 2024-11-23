@@ -1,0 +1,87 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Página Inicial";
+}
+
+
+<head>
+    <link href="~/CSS/homeCliente.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+</head>
+
+<section class="home" id="home">
+
+    <div class="content">
+        <h3>
+            
+        </h3>
+    </div>
+
+</section>
+
+<section class="products" id="products">
+    <h1 class="heading">Nossos <span>Produtos</span></h1>
+    <div class="swiper product-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide box">
+                <img src="~/Imagens/cebolaRoxa.png" alt="Cebola Roxa">
+                <h3>Cebola Roxa</h3>
+                <div class="price">R$2.99</div>
+                <a href="#" class="btn">Carrinho</a>
+            </div>
+            <div class="swiper-slide box">
+                <img src="~/Imagens/alfaceRoxo.png" alt="Alface Roxa">
+                <h3>Alface Roxa</h3>
+                <div class="price">R$2.99</div>
+                <a href="#" class="btn">Carrinho</a>
+            </div>
+            <div class="swiper-slide box">
+                <img src="~/Imagens/repolhoRoxo.png" alt="Repolho Roxo">
+                <h3>Repolho Roxo</h3>
+                <div class="price">R$2.99</div>
+                <a href="#" class="btn">Carrinho</a>
+            </div>
+            <div class="swiper-slide box">
+                <img src="~/Imagens/repolhoRoxo.png" alt="Repolho Roxo">
+                <h3>Repolho Roxo</h3>
+                <div class="price">R$2.99</div>
+                <a href="#" class="btn">Carrinho</a>
+            </div>
+        </div>
+    </div>
+
+
+    <h1 class="heading">Todos os <span>Produtos</span></h1>
+
+    @Html.Action("_ListaProduto", "Home", null)
+
+
+</section>
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".product-slider", {
+        loop: true,
+        spaceBetween: 20,
+        autoplay: {
+            delay: 7500,
+            disableOnInteraction: false,
+        },
+        centeredSlides: true,
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+            },
+            768: {
+                slidesPerView: 2,
+            },
+            1020: {
+                slidesPerView: 3,
+            },
+        },
+    });
+</script>

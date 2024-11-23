@@ -1,0 +1,190 @@
+﻿@model Web_PIM.Models.mFuncionario
+
+@{
+    ViewBag.Title = "Funcionários";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+@if (ViewBag.Aviso != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.Aviso
+    </div>
+}
+
+<link rel="stylesheet" href="~/CSS/styleTabela.css" type="text/css" />
+
+<h2>Funcionários</h2>
+
+<center>
+    @if (Session["Administrador"] != null)
+    {
+        <a class="button" href="javascript:void(0);" onclick="openModal('cadastrar')">
+            <span class="button-icon">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <span class="button-text">
+                Cadastrar
+            </span>
+        </a>
+    }
+
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.id)</th>
+                <th>@Html.DisplayNameFor(x => x.nmFuncionario)</th>
+                <th>@Html.DisplayNameFor(x => x.loginFuncionario)</th>
+                <th>@Html.DisplayNameFor(x => x.cargoFuncionario)</th>
+                <th>@Html.DisplayNameFor(x => x.nvlAcesso)</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var funcionario in ViewBag.Clientes as IEnumerable<Web_PIM.Models.mFuncionario>)
+            {
+                <tr class="active-row">
+                    <td>@funcionario.id</td>
+                    <td>@funcionario.nmFuncionario</td>
+                    <td>@funcionario.loginFuncionario</td>
+                    <td>@funcionario.cargoFuncionario</td>
+                    <td>@funcionario.nvlAcesso</td>
+                    <td></td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="openModal('editar', @funcionario.id)">
+                            <i class="fa-solid fa-pen" style="color: #0047AB"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("excluiFuncionario", "Administrador", new { id = funcionario.id })" style="color: #A52A2A" onclick="return confirm('Deseja realmente deletar?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</center>
+
+<!-- Modal de Cadastro -->
+<div class="modal-container" id="modalCadastro">
+    <div class="modal">
+        @using (Html.BeginForm("CadastraFuncionario", "Administrador", FormMethod.Post))
+        {
+            <div class="section personal-data">
+                <label for="nmFuncionarioCadastro">Nome</label>
+                @Html.EditorFor(x => x.nmFuncionario, new { htmlAttributes = new { @class = "input", type = "text", id = "nmFuncionarioCadastro", required = "required" } })
+
+                <label for="loginFuncionarioCadastro">Login</label>
+                @Html.EditorFor(x => x.loginFuncionario, new { htmlAttributes = new { @class = "input", type = "text", id = "loginFuncionarioCadastro", required = "required" } })
+
+                <label for="cargoFuncionarioCadastro">Cargo</label>
+                @Html.DropDownListFor(
+                    x => x.idCargo,
+                    (List<SelectListItem>)ViewBag.Cargos,
+                    new { @class = "select-dropdown", id = "cargoFuncionarioCadastro", required = "required" }
+                )
+
+                <label for="nvlAcessoCadastro">Nível de Acesso</label>
+                @Html.DropDownListFor(
+                    x => x.idNvlAcesso,
+                    (List<SelectListItem>)ViewBag.Acessos,
+                    new { @class = "select-dropdown", id = "nvlAcessoCadastro", required = "required" }
+                )
+            </div>
+
+            <div class="section personal-data">
+                <label for="senhaFuncionarioCadastro">Senha</label>
+                @Html.EditorFor(x => x.senhaFuncionario, new { htmlAttributes = new { @class = "input", type = "password", id = "senhaFuncionarioCadastro", required = "required" } })
+
+                <label for="confSenhaFuncionarioCadastro">Confirmar Senha</label>
+                @Html.EditorFor(x => x.confSenhaFuncionario, new { htmlAttributes = new { @class = "input", type = "password", id = "confSenhaFuncionarioCadastro", required = "required" } })
+            </div>
+
+            <div class="btn-submit">
+                <button type="submit" id="btnSalvar">Cadastrar</button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal-container" id="modalEdicao">
+    <div class="modal">
+        @using (Html.BeginForm("EditaFuncionario", "Administrador", FormMethod.Post))
+        {
+            <input type="hidden" id="idEdit" name="id" />
+            <div class="section personal-data">
+                <label for="nmFuncionarioEdit">Nome</label>
+                @Html.EditorFor(x => x.nmFuncionario, new { htmlAttributes = new { @class = "input", type = "text", id = "nmFuncionarioEdit", required = "required" } })
+
+                <label for="loginFuncionarioEdit">Login</label>
+                @Html.EditorFor(x => x.loginFuncionario, new { htmlAttributes = new { @class = "input", type = "text", id = "loginFuncionarioEdit", required = "required" } })
+
+                <label for="cargoFuncionarioEdit">Cargo</label>
+                @Html.DropDownListFor(
+                    x => x.idCargo,
+                    (List<SelectListItem>)ViewBag.Cargos,
+                    new { @class = "select-dropdown", id = "cargoFuncionarioEdit", required = "required" }
+                )
+
+                <label for="nvlAcessoEdit">Nível de Acesso</label>
+                @Html.DropDownListFor(
+                    x => x.idNvlAcesso,
+                    (List<SelectListItem>)ViewBag.Acessos,
+                    new { @class = "select-dropdown", id = "nvlAcessoEdit", required = "required" }
+                )
+            </div>
+
+            <div class="section personal-data">
+                <label for="senhaFuncionarioEdit">Senha</label>
+                @Html.EditorFor(x => x.senhaFuncionario, new { htmlAttributes = new { @class = "input", type = "password", id = "senhaFuncionarioEdit", required = "required" } })
+
+                <label for="confSenhaFuncionarioEdit">Confirmar Senha</label>
+                @Html.EditorFor(x => x.confSenhaFuncionario, new { htmlAttributes = new { @class = "input", type = "password", id = "confSenhaFuncionarioEdit", required = "required" } })
+            </div>
+
+            <div class="btn-submit">
+                <button type="submit" id="btnSalvar">Salvar Alterações</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    const modalCadastro = document.getElementById('modalCadastro');
+    const modalEdicao = document.getElementById('modalEdicao');
+
+    function openModal(tipo, funcionarioId = null) {
+        if (tipo === 'cadastrar') {
+            modalCadastro.classList.add('active');
+        } else if (tipo === 'editar' && funcionarioId) {
+            modalEdicao.classList.add('active');
+            fetch(`/Administrador/GetFuncionarioById?id=${funcionarioId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('idEdit').value = funcionarioId;
+                        document.getElementById('nmFuncionarioEdit').value = data.nome;
+                        document.getElementById('loginFuncionarioEdit').value = data.login;
+                        document.getElementById('cargoFuncionarioEdit').value = data.cargo;
+                        document.getElementById('nvlAcessoEdit').value = data.tipoAcesso;
+                        document.getElementById('senhaFuncionarioEdit').value = data.senhaFuncionario || '';
+                        document.getElementById('confSenhaFuncionarioEdit').value = data.senhaFuncionario || '';
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+    }
+
+    document.querySelectorAll('.modal-container').forEach(modal => {
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    });
+</script>

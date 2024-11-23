@@ -1,0 +1,21 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+body {
+
+}
+
+.products .product-slider {
+    padding: 1rem;
+}
+
+    .products .product-slider .box {
+        background: #fff;
+        border-radius: 0.5rem;
+        text-align: center;
+        padding: 3rem 2rem;
+        box-shadow: var(--shadow);
+    }

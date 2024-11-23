@@ -1,0 +1,79 @@
+﻿@model Web_PIM.Models.mCliente
+
+@{
+    Layout = null;
+    ViewBag.Title = "Cadastro";
+}
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web_PIM - Registre-se!</title>
+
+    <link rel="stylesheet" href="@Url.Content("~/CSS/styleRegister.css")" type="text/css" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/registerUser.css" />
+    <link rel="stylesheet" href="~/Fbarbosa.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <section class="container">
+        <header>Criar Cadastro</header>
+        <hr class="barra-separadora"/>
+        @using (Html.BeginForm("Cadastra", "Home", FormMethod.Post, new { @class = "form" }))
+        {
+            <div class="input-box">
+                <label>Nome Completo</label>
+                @Html.EditorFor(x => x.nome, new { htmlAttributes = new { type = "text", placeholder = "Digite seu nome completo", required = "required" } })
+            </div>
+
+            <div class="input-box">
+                <label>Email</label>
+                @Html.EditorFor(x => x.email, new { htmlAttributes = new { type = "email", placeholder = "example@email.com", required = "required" } })
+            </div>
+
+            <div class="input-box">
+                <label>Telefone/Celular</label>
+                @Html.EditorFor(x => x.telefone, new { htmlAttributes = new { type = "text", placeholder = "(11) 9 5523-2122", required = "required" } })
+            </div>
+
+            <div class="input-box">
+                <label>CPF/CNPJ</label>
+                @Html.EditorFor(x => x.documento, new { htmlAttributes = new { type = "text", placeholder = "Digite seu CPF ou CNPJ", required = "required" } })
+            </div>
+
+            <div class="input-box">
+                <label>Senha</label>
+                @Html.EditorFor(x => x.senha, new { htmlAttributes = new { type = "password", placeholder = "Digite sua senha", required = "required" } })
+            </div>
+
+            <div class="input-box">
+                <label>Confirme a Senha</label>
+                @Html.EditorFor(x => x.confirmaSenha, new { htmlAttributes = new { type = "password", placeholder = "Digite sua senha novamente", required = "required" } })
+            </div>
+
+            <label>
+                <input type="checkbox" id="myCheckbox" />
+                <span for="myCheckbox">Eu entendo e concordo com a <a href="https://youtu.be/xvFZjo5PgG0?si=YQ-eoruZgUdvXcsT">Política de Privacidade</a>.</span>
+            </label>
+
+            <button type="submit" class="button">Criar Conta</button>
+        }
+    </section>
+
+    <script>
+        function redirectToIndex() {
+            window.location.href = '@Url.Action("Index", "Home")';
+            return false;
+        }
+    </script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

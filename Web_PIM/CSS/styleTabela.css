@@ -1,0 +1,329 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+:root {
+    --bg-clr: #f5f5f5;
+    --btn-clr: #027f4d;
+    --btn-hover-clr: #027f4d;
+}
+
+h2 {
+    padding: 1.5em;
+}
+
+.content-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-family: 'Poppins';
+    font-size: 0.9em;
+    min-width: 550px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+    .content-table thead tr th {
+        background-color: #00A9A9;
+        color: #F3F3F3;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .content-table th,
+    .content-table td {
+        padding: 12px 15px;
+        color: #000;
+    }
+
+    .content-table tbody tr {
+        border-bottom: 1px solid #FFF;
+    }
+
+        .content-table tbody tr.active-row {
+            font-weight: bold;
+            color: #00A9A9;
+        }
+
+        .content-table tbody tr:nth-of-type(even) {
+            background-color: #F3F3F3;
+        }
+
+        .content-table tbody tr:last-of-type {
+            border-bottom: 2px solid #00A9A9;
+        }
+
+    .content-table a {
+        font-size: 20px;
+        padding-right: 15px;
+        text-decoration: none;
+    }
+
+.button {
+    display: inline-flex;
+    height: 40px;
+    padding: 0;
+    background: #00A9A9;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    overflow: hidden;
+    font-family: 'Poppins';
+    font-size: 15px;
+    font-weight: 450;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+    .button:hover {
+        background: #00A9C9;
+    }
+
+    .button:active {
+        background: #00A8A9;
+    }
+
+.button-text, .button-icon {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 24px;
+    color: #FFF;
+    height: 100%;
+}
+
+.button-icon {
+    font-size: 1.5em;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+button {
+    cursor: pointer;
+}
+
+.modal-container,
+.modal-container-edit {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+}
+
+.active {
+    display: flex;
+}
+
+    .active .modal {
+        animation: modal 0.4s;
+    }
+
+
+
+@keyframes modal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -60px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    background-color: white;
+    border-radius: 10px;
+    width: 70%;
+    max-width: 900px;
+}
+
+    .modal form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .modal label {
+        font-size: 15px;
+        width: 100%;
+    }
+
+    .modal input {
+        width: 100%;
+        outline: none;
+        padding: 5px 10px;
+        margin-bottom: 20px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+    }
+
+        .modal input:focus {
+            border-bottom: 1px solid #000;
+        }
+
+    .modal button {
+        width: 25%;
+        margin: 10px auto;
+        outline: none;
+        border-radius: 20px;
+        padding: 10px 10px;
+        border: none;
+        background-color: var(--btn-clr);
+        color: white;
+        display: flex;
+        justify-content: center;
+    }
+
+    .modal .section {
+        width: 48%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal .btn-submit {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+td button {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+    td button i {
+        font-size: 25px;
+    }
+
+        td button i:first-child {
+            margin-right: 10px;
+        }
+
+
+/* Estilo do DropDownList */
+.select-dropdown {
+    width: 100%;
+    outline: none;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+    .select-dropdown:focus {
+        border-bottom: 1px solid #000;
+    }
+
+
+
+@media (max-width: 700px) {
+    body {
+        font-size: 10px;
+    }
+
+    .header span {
+        font-size: 15px;
+    }
+
+    #new {
+        padding: 5px;
+        font-size: 10px;
+    }
+
+    thead tr th.acao {
+        width: auto !important;
+    }
+
+    td button i {
+        font-size: 20px !important;
+    }
+
+        td button i:first-child {
+            margin-right: 0;
+        }
+
+    .modal {
+        width: 90% !important;
+    }
+
+        .modal label {
+            font-size: 12px !important;
+        }
+
+        .modal form {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal .section {
+            width: 100%;
+        }
+}
+
+
+/* ESTILO DO UPLOAD DE IMAGEM */
+input[type="file"]::file-selector-button {
+    display: none;
+}
+
+.custom-file-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: var(--bg-clr);
+    border: none;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: #757575;
+    text-align: center;
+}
+
+    .custom-file-upload:hover {
+        background-color: #e0e0e0;
+    }
+
+.input-file {
+    display: none;
+}
+
+#custom-file-label {
+    width: 100%;
+    font-size: 15px;
+    text-align: left;
+    font-weight: normal;
+    color: #757575;
+}

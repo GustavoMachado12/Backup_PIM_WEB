@@ -1,0 +1,251 @@
+﻿@model Web_PIM.Models.mCliente
+
+@{
+    ViewBag.Title = "ConsultaClienteJ";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+@if (ViewBag.Aviso != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.Aviso
+    </div>
+}
+
+<link rel="stylesheet" href="~/CSS/styleTabela.css" type="text/css" />
+
+<h2>Cliente Jurídico</h2>
+
+<center>
+    @if (Session["Administrador"] != null)
+    {
+        <a class="button" href="javascript:void(0);" onclick="openModal('cadastrar')">
+            <span class="button-icon">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <span class="button-text">
+                Cadastrar
+            </span>
+        </a>
+    }
+
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.id)</th>
+                <th>@Html.DisplayNameFor(x => x.nome)</th>
+                <th>@Html.DisplayNameFor(x => x.email)</th>
+                <th>@Html.DisplayNameFor(x => x.endereco)</th>
+                <th>@Html.DisplayNameFor(x => x.telefone)</th>
+                <th>@Html.DisplayName("CNPJ")</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cliente in ViewBag.Clientes as IEnumerable<Web_PIM.Models.mCliente>)
+            {
+                <tr class="active-row">
+                    <td>@cliente.id</td>
+                    <td>@cliente.nome</td>
+                    <td>@cliente.email</td>
+                    <td>@cliente.endereco</td>
+                    <td>@cliente.telefone</td>
+                    <td>@cliente.documento</td>
+                    <td></td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="openModal('editar', @cliente.id)">
+                            <i class="fa-solid fa-pen" style="color: #0047AB"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("excluiCliente", "Administrador", new { id = cliente.id })" style="color: #A52A2A" onclick="return confirm('Deseja realmente deletar?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</center>
+
+<!-- Modal de Cadastro -->
+<div class="modal-container" id="modalCadastro">
+    <div class="modal">
+        @using (Html.BeginForm("CadastraCliente", "Administrador", FormMethod.Post))
+        {
+            <div class="section personal-data">
+                <label for="m-nome">Nome</label>
+                @Html.EditorFor(x => x.nome, new { htmlAttributes = new { @class = "input", type = "text", id = "m-nome", required = "required" } })
+
+                <label for="m-email">Email</label>
+                @Html.EditorFor(x => x.email, new { htmlAttributes = new { @class = "input", type = "email", id = "m-email", required = "required" } })
+
+                <label for="m-telefone">Telefone</label>
+                @Html.EditorFor(x => x.telefone, new { htmlAttributes = new { @class = "input", type = "number", id = "m-telefone", required = "required" } })
+
+                <label for="m-documento">Documento</label>
+                @Html.EditorFor(x => x.documento, new { htmlAttributes = new { @class = "input", type = "text", id = "m-documento", required = "required" } })
+            </div>
+
+            <div class="section address-data">
+                <label for="m-cep">CEP</label>
+                @Html.EditorFor(x => x.cep, new { htmlAttributes = new { @class = "input", type = "number", id = "m-cep", required = "required", onblur = "buscaCep()" } })
+
+                <label for="m-logradouro">Logradouro</label>
+                @Html.EditorFor(x => x.logradouro, new { htmlAttributes = new { @class = "input", type = "text", id = "m-logradouro", required = "required" } })
+
+                <label for="m-numero">Número</label>
+                @Html.EditorFor(x => x.numLogradouro, new { htmlAttributes = new { @class = "input", type = "number", id = "m-numero", required = "required" } })
+
+                <label for="m-bairro">Bairro</label>
+                @Html.EditorFor(x => x.bairro, new { htmlAttributes = new { @class = "input", type = "text", id = "m-bairro", required = "required" } })
+
+                <label for="m-cidade">Cidade</label>
+                @Html.EditorFor(x => x.cidade, new { htmlAttributes = new { @class = "input", type = "text", id = "m-cidade", required = "required" } })
+
+                <label for="m-estado">Estado</label>
+                @Html.EditorFor(x => x.estado, new { htmlAttributes = new { @class = "input", type = "text", id = "m-estado", required = "required" } })
+
+                <label for="m-Complemento">Complemento (*)</label>
+                @Html.EditorFor(x => x.complemento, new { htmlAttributes = new { @class = "input", type = "text", id = "m-complemento" } })
+            </div>
+
+            <div class="btn-submit">
+                <button type="submit" id="btnSalvar">Cadastrar</button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal-container" id="modalEdicao">
+    <div class="modal">
+        @using (Html.BeginForm("EditaCliente", "Administrador", FormMethod.Post))
+        {
+            <input type="hidden" id="m-id-edit" name="id" />
+            <div class="section personal-data">
+                <label for="m-nome-edit">Nome</label>
+                @Html.EditorFor(x => x.nome, new { htmlAttributes = new { @class = "input", type = "text", id = "m-nome-edit", required = "required" } })
+
+                <label for="m-email-edit">Email</label>
+                @Html.EditorFor(x => x.email, new { htmlAttributes = new { @class = "input", type = "email", id = "m-email-edit", required = "required" } })
+
+                <label for="m-telefone-edit">Telefone</label>
+                @Html.EditorFor(x => x.telefone, new { htmlAttributes = new { @class = "input", type = "number", id = "m-telefone-edit", required = "required" } })
+
+                <label for="m-documento-edit">Documento</label>
+                @Html.EditorFor(x => x.documento, new { htmlAttributes = new { @class = "input", type = "text", id = "m-documento-edit", required = "required" } })
+            </div>
+
+            <div class="section address-data">
+                <label for="m-cep-edit">CEP</label>
+                @Html.EditorFor(x => x.cep, new { htmlAttributes = new { @class = "input", type = "number", id = "m-cep-edit", required = "required", onblur = "buscaCepEdicao()" } })
+
+                <label for="m-logradouro-edit">Logradouro</label>
+                @Html.EditorFor(x => x.logradouro, new { htmlAttributes = new { @class = "input", type = "text", id = "m-logradouro-edit", required = "required" } })
+
+                <label for="m-numero-edit">Número</label>
+                @Html.EditorFor(x => x.numLogradouro, new { htmlAttributes = new { @class = "input", type = "number", id = "m-numero-edit", required = "required" } })
+
+                <label for="m-bairro-edit">Bairro</label>
+                @Html.EditorFor(x => x.bairro, new { htmlAttributes = new { @class = "input", type = "text", id = "m-bairro-edit", required = "required" } })
+
+                <label for="m-cidade-edit">Cidade</label>
+                @Html.EditorFor(x => x.cidade, new { htmlAttributes = new { @class = "input", type = "text", id = "m-cidade-edit", required = "required" } })
+
+                <label for="m-estado-edit">Estado</label>
+                @Html.EditorFor(x => x.estado, new { htmlAttributes = new { @class = "input", type = "text", id = "m-estado-edit", required = "required" } })
+
+                <label for="m-Complemento-edit">Complemento (*)</label>
+                @Html.EditorFor(x => x.complemento, new { htmlAttributes = new { @class = "input", type = "text", id = "m-complemento-edit" } })
+            </div>
+
+            <div class="btn-submit">
+                <button type="submit" id="btnSalvar">Salvar Alterações</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    const modalCadastro = document.getElementById('modalCadastro');
+    const modalEdicao = document.getElementById('modalEdicao');
+
+    function openModal(tipo, clienteId = null) {
+        if (tipo === 'cadastrar') {
+            modalCadastro.classList.add('active');
+        } else if (tipo === 'editar' && clienteId) {
+            modalEdicao.classList.add('active');
+            fetch(`/Administrador/GetClienteById?id=${clienteId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('m-id-edit').value = clienteId;
+                        document.getElementById('m-nome-edit').value = data.nome;
+                        document.getElementById('m-email-edit').value = data.email;
+                        document.getElementById('m-telefone-edit').value = data.telefone;
+                        document.getElementById('m-documento-edit').value = data.documento;
+                        document.getElementById('m-cep-edit').value = data.cep;
+                        document.getElementById('m-logradouro-edit').value = data.logradouro;
+                        document.getElementById('m-numero-edit').value = data.numLogradouro;
+                        document.getElementById('m-bairro-edit').value = data.bairro;
+                        document.getElementById('m-cidade-edit').value = data.cidade;
+                        document.getElementById('m-estado-edit').value = data.estado;
+                        document.getElementById('m-complemento-edit').value = data.complemento;
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+    }
+
+    document.querySelectorAll('.modal-container').forEach(modal => {
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    });
+
+    function buscaCep() {
+        var cep = document.getElementById('m-cep').value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('m-logradouro').value = data.logradouro;
+                        document.getElementById('m-bairro').value = data.bairro;
+                        document.getElementById('m-cidade').value = data.localidade;
+                        document.getElementById('m-estado').value = data.uf;
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                });
+        } else {
+            alert('CEP inválido.');
+        }
+    }
+
+    function buscaCepEdicao() {
+        var cep = document.getElementById('m-cep-edit').value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('m-logradouro-edit').value = data.logradouro;
+                        document.getElementById('m-bairro-edit').value = data.bairro;
+                        document.getElementById('m-cidade-edit').value = data.localidade;
+                        document.getElementById('m-estado-edit').value = data.uf;
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                });
+        } else {
+            alert('CEP inválido.');
+        }
+    }
+</script>

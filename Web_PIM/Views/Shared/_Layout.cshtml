@@ -1,0 +1,163 @@
+﻿@model Web_PIM.Models.mClienteLogin
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    @RenderSection("Styles", required: false)
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="~/CSS/styleHome.css" type="text/css" />
+</head>
+
+<body>
+
+    <header class="header">
+        <a href="#" class="logo"> <i class="img"></i> Fazenda Barbosa </a>
+
+        <nav class="navbar">
+            <a href="@Url.Action("Index", "Home")">Home</a>
+            <a href="#products">Produtos</a>
+            <a href="@Url.Action("About", "Home")">Sobre Nós</a>
+        </nav>
+
+        <div class="icons">
+            <div class="fas fa-search" id="search-btn"></div>
+            <div class="fas fa-shopping-cart" id="menu-btn"></div>
+            <div class="fas fa-user" id="login-btn"></div>
+        </div>
+
+        <form action="" class="search-form">
+            <input type="search" id="search-box" placeholder="Digite aqui">
+            <label for="search-box" class="fas fa-search">  </label>
+        </form>
+
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "login-form" }))
+        {
+            if (Session["Cliente"] == null)
+            {
+                <h3>Login</h3>
+                @Html.EditorFor(x => x.Login.login, new { htmlAttributes = new { @class = "box", type = "email", placeholder = "email@example.com" } })
+                @Html.EditorFor(x => x.Login.senha, new { htmlAttributes = new { @class = "box", type = "password", placeholder = "senha" } })
+                @*<input type="email" placeholder="email@example.com" class="box">
+                    <input type="password" placeholder="Senha" class="box">*@
+                <p>esqueci a senha <a href="#">clique aqui</a> </p>
+                <p>não tenho conta <a href="@Url.Action("Cadastra", "Home")">criar agora</a></p>
+                <input type="submit" value="login" class="btn">
+            }
+            else
+            {
+
+                <h3> @Html.DisplayFor(x => x.Cliente.nome)</h3>
+                <div class="option-menu">
+                    <a href="#"> Meus Pedidos </a>
+                    <a href="#"> Alterar Perfil </a>
+
+
+                    <a class="logout" href="@Url.Action("Logout", "Home")"> Logout </a>
+                </div>
+
+            }
+
+        }
+
+    </header>
+
+
+    @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+            <div class="container">
+                @Html.ActionLink("Nome do aplicativo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li>@Html.ActionLink("Página Inicial", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Contato", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>*@
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <script>
+        let searchForm = document.querySelector('.search-form');
+        document.querySelector('#search-btn').onclick = () => {
+            searchForm.classList.toggle('active');
+            loginForm.classList.remove('active');
+        }
+
+        let loginForm = document.querySelector('.login-form');
+        document.querySelector('#login-btn').onclick = () => {
+            loginForm.classList.toggle('active');
+            searchForm.classList.remove('active');
+        }
+
+        window.onscroll = () => {
+            searchForm.classList.remove('active');
+            loginForm.classList.remove('active');
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+
+    <div class="barraSeparadora"></div>
+
+    <footer>
+        <section>
+            <div class="containerFooter">
+
+                <div class="webFooter">
+                    <h3>Fazendas Barbosa</h3>
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Home")">Página Inicial</a></li>
+                        <li><a href="@Url.Action("About", "Home")">Sobre nós</a></li>
+                    </ul>
+                </div>
+
+                <div class="webFooter">
+                    <h3>Usuário</h3>
+                    <ul>
+                        <li><a href="#">Login</a></li>
+                        <li><a href="@Url.Action("Cadastra", "Home")">Cadastro</a></li>
+                        <li><a href="#">Carrinho</a></li>
+                    </ul>
+                </div>
+
+                <div class="webFooter">
+                    <h3>Contatos</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/FarmskinsOfficial/"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/farmskins"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/farmskins_live/"><i class="fab fa-instagram"></i></a>
+                        <a href="https://farmskins.com/"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="webFooter">
+                    <h3>Endereço</h3>
+                    <p>
+                        <a class="endereco" href="https://maps.app.goo.gl/ggJE1fdiY5YeRASo7">Av. Dr. Gastão Vidigal - Vila Leopoldina, São Paulo - SP, 02675-031</a><br />
+                        <iframe class="mapa" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1829.0176464620986!2d-46.7368765!3d-23.531233!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef97ce99e9e03%3A0x78e7b5cf28733625!2sCeasa!5e0!3m2!1spt-BR!2sbr!4v1731292145574!5m2!1spt-BR!2sbr" width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="credit"><a>© Lunarti's </a> &nbsp&nbsp&nbsp | &nbsp&nbsp&nbsp <a> Fazendas Barbosa</a></div>
+
+        </section>
+
+    </footer>
+
+</body>
+</html>
+

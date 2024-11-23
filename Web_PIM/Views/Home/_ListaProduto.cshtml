@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Web_PIM.Models.mProduto>
+
+@{
+    ViewBag.Title = "_ListaProduto";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/CSS/styleListaProdutos.css" type="text/css" />
+
+<div class="card-container">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <img src="@item.fotoProduto" alt="Produto">
+            <div class="card-content">
+                <h3>@item.nomeProduto</h3>
+                <p class="price">R$ @item.valor</p>
+                <a href="#" class="button">Comprar</a>
+            </div>
+        </div>
+    }
+</div>

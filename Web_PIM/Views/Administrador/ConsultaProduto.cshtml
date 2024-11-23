@@ -1,0 +1,195 @@
+﻿@model Web_PIM.Models.mProduto
+
+@{
+    ViewBag.Title = "Produto";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+@if (ViewBag.Aviso != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.Aviso
+    </div>
+}
+
+
+<link rel="stylesheet" href="~/CSS/styleTabela.css" type="text/css" />
+
+<h2>Produtos</h2>
+
+<center>
+    @if (Session["Administrador"] != null)
+    {
+        <a class="button" href="javascript:void(0);" onclick="openModal('cadastrar')">
+            <span class="button-icon">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <span class="button-text">
+                Cadastrar
+            </span>
+        </a>
+    }
+
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.idProduto)</th>
+                <th>@Html.DisplayNameFor(x => x.nomeProduto)</th>
+                <th>@Html.DisplayNameFor(x => x.valor)</th>
+                <th>@Html.DisplayNameFor(x => x.categoria)</th>
+                <th>@Html.DisplayNameFor(x => x.quantidade)</th>
+                <th>@Html.DisplayNameFor(x => x.fotoProduto)</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var produto in ViewBag.Produtos as IEnumerable<Web_PIM.Models.mProduto>)
+            {
+                <tr class="active-row">
+                    <td>@produto.idProduto</td>
+                    <td>@produto.nomeProduto</td>
+                    <td>@produto.valor</td>
+                    <td>@produto.categoria</td>
+                    <td>@produto.quantidade</td>
+                    <td><img src="@produto.fotoProduto" alt="Foto do Produto" style="width: 50px; height: 50px;" /></td>
+                    <td></td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="openModal('editar', @produto.idProduto)">
+                            <i class="fa-solid fa-pen" style="color: #0047AB"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ExcluiProduto", "Administrador", new { id = produto.idProduto })" style="color: #A52A2A" onclick="return confirm('Deseja realmente deletar?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</center>
+
+<!-- Modal de Cadastro -->
+<div class="modal-container" id="modalCadastro">
+    <div class="modal">
+        @using (Html.BeginForm("CadastraProduto", "Administrador", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="section">
+                <label for="m-nomeProduto">Nome do Produto</label>
+                @Html.EditorFor(x => x.nomeProduto, new { htmlAttributes = new { @class = "input", type = "text", id = "m-nomeProduto", required = "required" } })
+
+                <label for="m-valor">Valor</label>
+                @Html.EditorFor(x => x.valor, new { htmlAttributes = new { @class = "input", type = "text", id = "m-valor", required = "required" } })
+
+                <label for="m-categoria">Categoria</label>
+                @Html.DropDownListFor(
+                    x => x.categoria,
+                    (List<SelectListItem>)ViewBag.Categorias,
+                    new { @class = "select-dropdown", id = "m-categoria", required = "required" }
+                )
+
+                <label for="m-quantidade">Quantidade</label>
+                @Html.EditorFor(x => x.quantidade, new { htmlAttributes = new { @class = "input", type = "number", id = "m-quantidade", required = "required" } })
+            </div>
+
+            <div class="section address-data">
+                <label for="m-fotoProduto">Foto do Produto</label>
+                <input type="file" class="input" id="m-fotoProduto" name="fotoProduto" accept="image/*" />
+            </div>
+
+            <div class="btn-submit">
+                <button type="submit" id="btnSalvar">Cadastrar</button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal-container" id="modalEdicao">
+    <div class="modal">
+        @using (Html.BeginForm("EditaProduto", "Administrador", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" id="m-idProduto-edit" name="idProduto" />
+
+            <div class="section personal-data">
+                <label for="m-nomeProduto-edit">Nome do Produto</label>
+                @Html.EditorFor(x => x.nomeProduto, new { htmlAttributes = new { @class = "input", type = "text", id = "m-nomeProduto-edit", required = "required" } })
+
+                <label for="m-valor-edit">Valor</label>
+                @Html.EditorFor(x => x.valor, new { htmlAttributes = new { @class = "input", type = "text", id = "m-valor-edit", required = "required" } })
+
+                <label for="m-categoria-edit">Categoria</label>
+                @Html.DropDownListFor(
+                    x => x.idCategoria,
+                    (List<SelectListItem>)ViewBag.Categorias,
+                    new { @class = "select-dropdown", id = "m-categoria-edit", required = "required" }
+                )
+
+                <label for="m-quantidade-edit">Quantidade</label>
+                @Html.EditorFor(x => x.quantidade, new { htmlAttributes = new { @class = "input", type = "number", id = "m-quantidade-edit", required = "required" } })
+            </div>
+
+            <div class="section address-data">
+                <label for="m-fotoProduto-edit">Foto do Produto</label>
+                <input type="hidden" id="fotoProdutoLink" name="fotoProdutoLink" />
+                <input type="file" class="input" id="m-fotoProduto-edit" name="fotoProduto" accept="image/*" />
+            </div>
+
+            <div class="btn-submit">
+                <button type="submit" id="btnSalvar">Salvar Alterações</button>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<script>
+    const modalCadastro = document.getElementById('modalCadastro');
+    const modalEdicao = document.getElementById('modalEdicao');
+
+    function openModal(tipo, produtoId = null) {
+        if (tipo === 'editar' && produtoId) {
+            modalEdicao.classList.add('active');
+            fetch(`/Administrador/GetProdutoById?id=${produtoId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('m-idProduto-edit').value = data.idProduto;
+                        document.getElementById('m-nomeProduto-edit').value = data.nomeProduto;
+                        document.getElementById('m-valor-edit').value = data.valor;
+                        document.getElementById('m-categoria-edit').value = data.idCategoria;
+                        document.getElementById('m-quantidade-edit').value = data.quantidade;
+
+                        const fotoProdutoLink = document.getElementById('fotoProdutoLink');
+                        if (data.fotoProduto) {
+                            fotoProdutoLink.value = data.fotoProduto;
+                        } else {
+                            fotoProdutoLink.value = '';
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar os dados do produto:", error);
+                    alert("Ocorreu um erro ao buscar os dados do produto.");
+                });
+        } else {
+            modalCadastro.classList.add('active');
+        }
+    }
+
+    document.querySelectorAll('.modal-container').forEach(modal => {
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    });
+
+
+
+</script>
