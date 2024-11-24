@@ -15,7 +15,7 @@
             <div class="card-content">
                 <h3>@item.nomeProduto</h3>
                 <p class="price">R$ @item.valor</p>
-                <a href="#" class="button">Comprar</a>
+                <a href="@Url.Action("AdicionarCarrinho", "Home", new { id = item.idProduto })" class="button">Comprar</a>
             </div>
         </div>
     }

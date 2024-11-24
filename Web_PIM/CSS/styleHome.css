@@ -39,6 +39,19 @@ body {
     background: #eee;
 }
 
+.btn {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 8rem 3rem;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    border: .2rem solid var(--black);
+    color: var(--black);
+    cursor: pointer;
+}
+
+
+
 section {
     padding: 2rem 9%;
 }
@@ -136,52 +149,151 @@ section {
             cursor: pointer;
         }
 
-    .header .login-form {
-        position: absolute;
-        top: 110%;
-        right: -110%;
-        width: 30rem;
-        box-shadow: var(--box-shadow);
-        padding: 2rem;
-        border-radius: .5rem;
-        background: #fff;
-        text-align: center;
+
+/* CARRINHO */
+.shopping-cart {
+    position: absolute;
+    top: 110%;
+    right: -110%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--box-shadow);
+    width: 30rem;
+    background: #fff;
+    overflow-y: auto; /* Adiciona rolagem se o conteúdo exceder a altura */
+    max-height: 80vh; /* Limita a altura do carrinho */
+}
+
+    .shopping-cart.active {
+        right: 2rem;
+        transition: 0.4s linear;
     }
 
-        .header .login-form.active {
-            right: 2rem;
-            transition: .4s linear;
+    .shopping-cart .box {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        margin: 1rem 0;
+        border-bottom: 1px solid #ddd; /* Linha separadora entre itens */
+        padding-bottom: 1rem;
+    }
+
+        .shopping-cart .box img {
+            height: 6rem; /* Reduzi o tamanho para melhor encaixe */
+            border-radius: 0.5rem; /* Adiciona cantos arredondados às imagens */
         }
 
-        .header .login-form h3 {
-            font-size: 1.8rem;
-            text-transform: uppercase;
+    .shopping-cart .fa-trash {
+        font-size: 1.5rem;
+        position: absolute;
+        top: 50%;
+        right: 2rem;
+        cursor: pointer;
+        color: var(--light-color);
+        transform: translateY(-50%);
+    }
+
+        .shopping-cart .fa-trash:hover {
             color: var(--black);
-            margin-bottom: 1rem;
         }
 
-        .header .login-form .box {
-            width: 100%;
-            margin: .8rem 0;
-            background: #eee;
-            border-radius: .5rem;
-            padding: 1rem;
+    .shopping-cart .box .content {
+        flex-grow: 1;
+        max-width: 65%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+        .shopping-cart .box .content h3 {
+            color: var(--black);
             font-size: 1.2rem;
-            color: var(--black);
-            text-transform: none;
+            margin-bottom: 0.2rem; /* Reduzido para alinhar melhor os elementos */
+            line-height: 1.2;
         }
 
-        .header .login-form p {
-            margin-top: 1rem;
-            font-size: 1rem;
-            padding: .2rem 0;
+        .shopping-cart .box .content span {
             color: var(--light-color);
+            font-size: 1rem;
+            display: inline-block; /* Mantém as informações em linha */
         }
 
-            .header .login-form p a {
-                color: blue;
-                text-decoration: underline;
-            }
+        .shopping-cart .box .content .quantity {
+            padding-left: 0.5rem; /* Reduzido o espaçamento lateral */
+            color: var(--black);
+            font-weight: bold;
+            display: inline; /* Deixa a quantidade alinhada ao lado da descrição */
+        }
+
+    .shopping-cart .total {
+        font-size: 1.8rem;
+        padding: 1rem 0;
+        text-align: center;
+        color: var(--black);
+        margin-top: 1rem;
+    }
+
+    .shopping-cart .btn {
+        display: block;
+        text-align: center;
+        margin: 1rem auto;
+        width: 90%; /* Centraliza e limita a largura */
+        max-width: 20rem; /* Limite máximo */
+    }
+
+    .shopping-cart.loading {
+        opacity: 0.5;
+        pointer-events: none; /* Desabilita interações durante o carregamento */
+    }
+
+    /* LOGIN */
+.header .login-form {
+    position: absolute;
+    top: 110%;
+    right: -110%;
+    width: 30rem;
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    border-radius: .5rem;
+    background: #fff;
+    text-align: center;
+}
+
+    .header .login-form.active {
+        right: 2rem;
+        transition: .4s linear;
+    }
+
+    .header .login-form h3 {
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        color: var(--black);
+        margin-bottom: 1rem;
+    }
+
+    .header .login-form .box {
+        width: 100%;
+        margin: .8rem 0;
+        background: #eee;
+        border-radius: .5rem;
+        padding: 1rem;
+        font-size: 1.2rem;
+        color: var(--black);
+        text-transform: none;
+    }
+
+    .header .login-form p {
+        margin-top: 1rem;
+        font-size: 1rem;
+        padding: .2rem 0;
+        color: var(--light-color);
+    }
+
+        .header .login-form p a {
+            color: blue;
+            text-decoration: underline;
+        }
 
 .login-form .option-menu a {
     display: flex;
@@ -383,68 +495,68 @@ section {
     padding: 10px;
 }
 
-.webFooter h3 {
-    font-size: 20px;
-    color: var(--black);
-    text-transform: capitalize;
-    margin-bottom: 30px;
-    font-weight: 500;
-    position: relative;
-}
-
-.webFooter h3::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -10px;
-    background-color: green;
-    height: 2px;
-    box-sizing: border-box;
-    width: 50px;
-}
-
-.webFooter ul {
-    list-style: none;
-}
-
-    .webFooter ul li:not(:last-child) {
-    margin-bottom: 10px;
-    }
-
-    .webFooter ul li a{
-    font-size: 16px;
-    text-transform: capitalize;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 300;
-    color: #000;
-    display: block;
-    transition: all 0.3s ease;
-    }
-
-    .webFooter ul li a:hover {
-        color: #416238;
-        padding-left: 6px;
-    }
-
-.webFooter .social-links a{
-    display: inline-block;
-    height: 40px;
-    width: 40px;
-    background-color: var(--black);
-    margin: 0 10px 10px 0;
-    text-align: center;
-    line-height: 40px;
-    border-radius: 50%;
-    color: #fff;
-    transition: all 0.5s ease;
-}
-
-    .webFooter .social-links a:hover {
+    .webFooter h3 {
+        font-size: 20px;
         color: var(--black);
-        background-color: #fff;
-        border: 3px solid var(--black);
+        text-transform: capitalize;
+        margin-bottom: 30px;
+        font-weight: 500;
+        position: relative;
     }
+
+        .webFooter h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            background-color: green;
+            height: 2px;
+            box-sizing: border-box;
+            width: 50px;
+        }
+
+    .webFooter ul {
+        list-style: none;
+    }
+
+        .webFooter ul li:not(:last-child) {
+            margin-bottom: 10px;
+        }
+
+        .webFooter ul li a {
+            font-size: 16px;
+            text-transform: capitalize;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 300;
+            color: #000;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+            .webFooter ul li a:hover {
+                color: #416238;
+                padding-left: 6px;
+            }
+
+    .webFooter .social-links a {
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        background-color: var(--black);
+        margin: 0 10px 10px 0;
+        text-align: center;
+        line-height: 40px;
+        border-radius: 50%;
+        color: #fff;
+        transition: all 0.5s ease;
+    }
+
+        .webFooter .social-links a:hover {
+            color: var(--black);
+            background-color: #fff;
+            border: 3px solid var(--black);
+        }
 
 .endereco {
     font-size: 16px;
@@ -472,23 +584,23 @@ section {
 }
 
 
-    /* Responsatividade para o Footer */
-    @media(max-width: 767px) {
-        .webFooter {
-            width: 50%;
-            margin-bottom: 30px;
-        }
+/* Responsatividade para o Footer */
+@media(max-width: 767px) {
+    .webFooter {
+        width: 50%;
+        margin-bottom: 30px;
     }
+}
 
-    @media(max-width: 574px) {
+@media(max-width: 574px) {
     .webFooter {
         width: 100%;
-        }
     }
+}
 
-    @media(max-width: 574px) {
+@media(max-width: 574px) {
     .mapa {
         width: 400px;
         height: 200px;
-        }
     }
+}

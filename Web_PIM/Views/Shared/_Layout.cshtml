@@ -24,7 +24,7 @@
 
         <div class="icons">
             <div class="fas fa-search" id="search-btn"></div>
-            <div class="fas fa-shopping-cart" id="menu-btn"></div>
+            <div class="fas fa-shopping-cart" id="cart-btn"></div>
             <div class="fas fa-user" id="login-btn"></div>
         </div>
 
@@ -32,6 +32,11 @@
             <input type="search" id="search-box" placeholder="Digite aqui">
             <label for="search-box" class="fas fa-search">  </label>
         </form>
+
+        <!-- CARRINHO -->
+        <div class="shopping-cart">
+            @Html.Action("_ListaCarrinho", "Home")
+        </div>
 
         @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "login-form" }))
         {
@@ -99,9 +104,17 @@
             searchForm.classList.remove('active');
         }
 
+        let carrinhoForm = document.querySelector('.shopping-cart');
+        document.querySelector('#cart-btn').onclick = () => {
+            carrinhoForm.classList.toggle('active');
+            searchForm.classList.remove('active');
+        }
+
+        // Fechar os formulários ao rolar a página
         window.onscroll = () => {
             searchForm.classList.remove('active');
             loginForm.classList.remove('active');
+            carrinhoForm.classList.remove('active');
         }
     </script>
 
@@ -158,6 +171,30 @@
 
     </footer>
 
+    <script>
+
+        $(document).ready(function () {
+            $(".add-to-cart").click(function (event) {
+                event.preventDefault(); // Impede o comportamento padrão do link ou botão
+
+                var productId = $(this).data("product-id"); // Obtém o ID do produto do botão ou link clicado
+
+                $.ajax({
+                    url: '/Home/AdicionarCarrinho', // URL da Action
+                    type: 'POST', // Método POST
+                    data: { id: productId }, // Dados a serem enviados (ID do produto)
+                    success: function (response) {
+                        // Recarrega a parte do carrinho após adicionar o item
+                        $(".shopping-cart").load("/Home/_ListaCarrinho"); // Carrega a parcial do carrinho
+                    },
+                    error: function () {
+                        alert("Erro ao adicionar produto ao carrinho.");
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 </html>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -127,7 +128,108 @@ namespace Web_PIM.Controllers
         public ActionResult _ListaProduto()
         {
 
-            return PartialView(acProduto.PegaTodosProdutos()); 
+            return PartialView(acProduto.PegaTodosProdutos());
         }
+
+        public ActionResult _ListaCarrinho()
+        {
+            // Recupera o carrinho da sessão ou cria um novo
+            var carrinho = Session["Carrinho"] as mCompra;
+
+            if (carrinho == null)
+            {
+                // Se a sessão não contém o carrinho, inicializa um novo
+                carrinho = new mCompra
+                {
+                    ItensPedido = new List<mItensPedidos>()
+                };
+                Debug.WriteLine("Sessão de carrinho está vazia. Novo carrinho criado.");
+            }
+            else
+            {
+                Debug.WriteLine($"Carrinho recuperado da sessão. Total de itens: {carrinho.ItensPedido.Count}");
+            }
+
+            // Verifica se a lista de itens está corretamente inicializada
+            if (carrinho.ItensPedido == null || !carrinho.ItensPedido.Any())
+            {
+                Debug.WriteLine("O carrinho não possui itens.");
+            }
+            else
+            {
+                Debug.WriteLine("Itens no carrinho:");
+                foreach (var item in carrinho.ItensPedido)
+                {
+                    Debug.WriteLine($"Produto: {item.nmProduto}, Quantidade: {item.qtdProduto}, Preço: {item.vlrProduto}");
+                }
+            }
+            return PartialView("_ListaCarrinho", carrinho); // Substitua "_ListaCarrinho" pelo nome correto da View
+        }
+
+        public ActionResult AdicionarCarrinho(int id)
+        {
+            // Recupera ou cria um novo carrinho na sessão
+            var carrinho = Session["Carrinho"] as mCompra ?? new mCompra { ItensPedido = new List<mItensPedidos>() };
+
+            // Busca o produto no banco de dados
+            var produto = acProduto.consultaProdutoPorId(id);
+            if (produto == null)
+            {
+                // Retorna algum erro ou redireciona caso o produto não exista
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Verifica se o produto já está no carrinho
+            var itemExistente = carrinho.ItensPedido.FirstOrDefault(p => p.codProduto == id.ToString());
+            if (itemExistente != null)
+            {
+                // Atualiza a quantidade e o preço do item existente
+                itemExistente.qtdProduto += 1;
+            }
+            else
+            {
+                // Adiciona o novo item ao carrinho
+                var novoItem = new mItensPedidos
+                {
+                    ItemPedidoID = Guid.NewGuid(),
+                    codProduto = id.ToString(),
+                    nmProduto = produto.nomeProduto,
+                    imgProduto = produto.fotoProduto, // Certifique-se de que `fotoProduto` existe no modelo
+                    vlrProduto = Convert.ToDecimal(produto.valor),
+                    qtdProduto = 1
+                };
+                carrinho.ItensPedido.Add(novoItem);
+            }
+
+            // Atualiza o valor total do carrinho
+            carrinho.vlCompra = carrinho.ItensPedido.Sum(item => item.vlrProduto * item.qtdProduto);
+
+            // Salva o carrinho na sessão
+            Session["Carrinho"] = carrinho;
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpPost]
+        public ActionResult RemoverDoCarrinho(int id)
+        {
+            var carrinho = Session["Carrinho"] as mCompra;
+
+            if (carrinho != null)
+            {
+                var item = carrinho.ItensPedido.FirstOrDefault(i => i.codProduto == id.ToString());
+                if (item != null)
+                {
+                    carrinho.ItensPedido.Remove(item);
+                    carrinho.vlCompra = carrinho.ItensPedido.Sum(i => Convert.ToDecimal(i.vlrProduto) * i.qtdProduto);
+                }
+
+                Session["Carrinho"] = carrinho;
+            }
+
+            return Json(new { success = true });
+        }
+
     }
 }
