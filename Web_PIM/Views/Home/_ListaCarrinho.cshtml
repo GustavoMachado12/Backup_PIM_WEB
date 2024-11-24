@@ -1,0 +1,42 @@
+﻿@model Web_PIM.Models.mCompra
+
+@{
+    Layout = null;
+}
+
+
+<link rel="stylesheet" href="~/CSS/styleHome.css" type="text/css" />
+
+@if (Model.ItensPedido == null || !Model.ItensPedido.Any())
+{
+    <h2>Carrinho vazio.</h2>
+}
+else
+{
+    foreach (var item in Model.ItensPedido)
+    {
+        <div class="box">
+            <button class="remove-item" data-id="@item.codProduto">
+                <i class="fas fa-trash"></i>
+            </button>
+            <img src="@item.imgProduto" alt="Imagem do Produto">
+            <div class="content">
+                <h3>@item.nmProduto</h3>
+                <span class="price">Preço: R$ @string.Format("{0:0.00}", item.vlrProduto)</span>
+                <span class="quantity">Qtd: @item.qtdProduto</span>
+            </div>
+        </div>
+
+
+    }
+
+    <div class="total">
+        Total: R$ @string.Format("{0:0.00}", Model.vlCompra)
+    </div>
+    <a href="@Url.Action("Finalizar", "Carrinho")" class="btn">Finalizar Compra</a>
+}
+
+
+
+
+

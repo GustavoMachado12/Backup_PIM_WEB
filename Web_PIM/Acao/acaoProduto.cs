@@ -111,6 +111,7 @@ namespace Web_PIM.Acao
             catch (Exception ex)
             {
                 // Log ou tratamento de erro
+                Console.WriteLine(ex.Message);
                 con.CloseConnection();
                 return false;
             }
@@ -134,6 +135,7 @@ namespace Web_PIM.Acao
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 con.CloseConnection();
                 return false;
             }

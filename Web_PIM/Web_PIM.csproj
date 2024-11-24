@@ -166,11 +166,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\mCargos.cs" />
+    <Compile Include="Models\mCarrinho.cs" />
     <Compile Include="Models\mCategoria.cs" />
     <Compile Include="Models\mCliente.cs" />
     <Compile Include="Models\mClienteLogin.cs" />
+    <Compile Include="Models\mCompra.cs" />
     <Compile Include="Models\mFornecedor.cs" />
     <Compile Include="Models\mFuncionario.cs" />
+    <Compile Include="Models\mItensPedidos.cs" />
     <Compile Include="Models\mLogin.cs" />
     <Compile Include="Models\mNivelAcesso.cs" />
     <Compile Include="Models\mProduto.cs" />
@@ -253,6 +256,7 @@
     <Content Include="Views\Administrador\ConsultaFuncionario.cshtml" />
     <Content Include="Views\Administrador\ConsultaFornecedor.cshtml" />
     <Content Include="Views\Administrador\ConsultaProduto.cshtml" />
+    <Content Include="Views\Home\_ListaCarrinho.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
